@@ -1,0 +1,74 @@
+services:
+  app:
+    image: teguhyuhono/simada:1.0
+    container_name: simada-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+      - nginx
+    networks:
+      - simada
+    environment:
+      # Use .env file for these variables
+      DB_DATABASE: ${DB_DATABASE}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+
+  db:
+    image: mariadb:10.11
+    container_name: simada-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 33060:3306
+    networks:
+      - simada
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: simada-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - simada
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: simada-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: simada-db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    networks:
+      - simada
+
+networks:
+  simada:
+    driver: bridge
+volumes:
+  db_data:
