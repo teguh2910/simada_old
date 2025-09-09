@@ -63,10 +63,17 @@
               </p>
             </a>
           </li>                  
+            
             <li class="nav-item">
-              <a href="{{ url('simada-ai') }}" class="nav-link">
-                <i class="nav-icon fas fa-robot"></i>
-                <p>SIMADA AI</p>
+              <a href="{{ url('list-pcr') }}" class="nav-link">
+                <i class="nav-icon fas fa-list"></i>
+                <p>List PCR</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url('list-pending-pcr') }}" class="nav-link">
+                <i class="nav-icon fas fa-clock"></i>
+                <p>List Pending PCR</p>
               </a>
             </li>
           <li class="nav-item">

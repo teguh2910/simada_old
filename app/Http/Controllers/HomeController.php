@@ -225,7 +225,107 @@ class HomeController extends Controller
         ->whereNull('file')
         ->where('is_need',1)
         ->whereDate('due_date', '<=', Carbon::today())
-        ->count(); 
-        return view('dashboard',compact(['outs','draft','final','overd']));
+        ->count();
+
+        // PCR Statistics
+        $url = 'https://n8n.servercikarang.cloud/webhook/list-pcr';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $pcrData = json_decode($response, true);
+
+        // Initialize PCR counts
+        $pcrTotal = 0;
+        $pcrFinish = 0;
+        $pcrCancel = 0;
+        $pcrOnHold = 0;
+        $pcrStage0 = 0;
+        $pcrStage1 = 0;
+        $pcrStage2 = 0;
+        $pcrStage3 = 0;
+
+        if (is_array($pcrData)) {
+            $pcrTotal = count($pcrData);
+
+            foreach ($pcrData as $item) {
+                $status = $item['Status'] ?? '';
+
+                switch ($status) {
+                    case 'Finish':
+                    case 'Completed':
+                    case 'Done':
+                        $pcrFinish++;
+                        break;
+                    case 'Cancel':
+                    case 'Cancelled':
+                    case 'Canceled':
+                        $pcrCancel++;
+                        break;
+                    case 'On Hold':
+                        $pcrOnHold++;
+                        break;
+                    case 'Stage 0 Progress':
+                        $pcrStage0++;
+                        break;
+                    case 'Stage 1 Progress':
+                        $pcrStage1++;
+                        break;
+                    case 'Stage 2 Progress':
+                        $pcrStage2++;
+                        break;
+                    case 'Stage 3 Progress':
+                        $pcrStage3++;
+                        break;
+                }
+            }
+        }
+
+        return view('dashboard', compact(['outs','draft','final','overd','pcrTotal','pcrFinish','pcrCancel','pcrOnHold','pcrStage0','pcrStage1','pcrStage2','pcrStage3']));
+    }
+
+    public function listPcr()
+    {
+        
+        
+        // Uncomment below when webhook is active
+        
+        $url = 'https://n8n.servercikarang.cloud/webhook/list-pcr';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        $data = json_decode($response, true);
+        
+        
+        return view('list_pcr', compact('data'));
+    }
+
+    public function listPendingPcr()
+    {
+    
+        // Uncomment below when webhook is active
+        $url = 'https://n8n.servercikarang.cloud/webhook/list-pcr';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $data = json_decode($response, true);
+        $pendingStatuses = ['On Hold', 'Stage 0 Progress', 'Stage 1 Progress', 'Stage 2 Progress', 'Stage 3 Progress'];
+        $filteredData = array_filter($data, function($item) use ($pendingStatuses) {
+            return in_array($item['Status'] ?? '', $pendingStatuses);
+        });
+        
+
+        return view('list_pending_pcr', compact('filteredData'));
     }
 }

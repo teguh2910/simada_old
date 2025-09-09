@@ -24,3 +24,9 @@ Route::get('/dashboard', 'HomeController@dashboard');
 Route::get('/simada-ai', function() {
 	return view('simada_ai');
 });
+
+// List PCR feature
+Route::get('/list-pcr', 'HomeController@listPcr');
+
+// List Pending PCR feature
+Route::get('/list-pending-pcr', 'HomeController@listPendingPcr');
