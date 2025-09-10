@@ -15,7 +15,7 @@
                 @if (\auth::user()->dept == 'MIM' || \auth::user()->dept == 'NPL')
                     <!-- Dashboard (Top Level) -->
                     <li class="nav-item">
-                        <a href="{{ asset('dashboard') }}" class="nav-link">
+                        <a href="{{ route('dashboard') }}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Dashboard</p>
                         </a>
@@ -38,7 +38,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ asset('/') }}" class="nav-link">
+                                <a href="{{ asset('/outstanding') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Outstanding SPTT</p>
                                 </a>

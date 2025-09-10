@@ -25,7 +25,17 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
+
+    /**
+     * Get the post login redirect path.
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        return '/dashboard';
+    }
 
     /**
      * Create a new controller instance.

@@ -1,7 +1,7 @@
 <?php
 Auth::routes();
-Route::get('/home', 'HomeController@index');
-Route::get('/', 'HomeController@index');
+Route::get('/outstanding', 'HomeController@index');
+Route::get('/', 'HomeController@dashboard');
 Route::get('/create', 'HomeController@create');
 Route::post('/create', 'HomeController@create_store');
 Route::get('/upload/{id}', 'HomeController@upload');
@@ -17,7 +17,7 @@ Route::get('/final/{id}', 'HomeController@final');
 Route::get('/overdue', 'HomeController@overdue');
 Route::get('/del/{id}', 'HomeController@del');
 Route::get('/noneed/{id}', 'HomeController@noneed');
-Route::get('/dashboard', 'HomeController@dashboard');
+Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
 
 // SIMADA AI chatbox feature
