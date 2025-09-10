@@ -328,4 +328,248 @@ class HomeController extends Controller
 
         return view('list_pending_pcr', compact('filteredData'));
     }
+
+    public function createPcr()
+    {
+        return view('create_pcr');
+    }
+
+    public function storePcr(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'pur_pic' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'reg_numb' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
+            'coy' => 'required|string|max:255',
+            'supplier' => 'required|string|max:255',
+            'classification' => 'required|string|max:255',
+            'problem' => 'required|string|max:255',
+            'type_of_activity' => 'required|string|max:255',
+            'activity_description' => 'required|string',
+            'part_name' => 'required|string|max:255',
+            'part_no' => 'required|string|max:255',
+            'product' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'plan_svp' => 'required|string|max:255',
+            'act_svp' => 'required|string|max:255',
+        ]);
+
+        // Prepare data for webhook
+        $pcrData = [
+            'Pur PIC' => $request->pur_pic,
+            'Department' => $request->department,
+            'Reg Numb' => $request->reg_numb,
+            'Status' => $request->status,
+            'Coy' => $request->coy,
+            'Supplier' => $request->supplier,
+            'Classification' => $request->classification,
+            'Problem' => $request->problem,
+            'Type of activity' => $request->type_of_activity,
+            'Activity Description' => $request->activity_description,
+            'Part Name' => $request->part_name,
+            'Part No' => $request->part_no,
+            'Product' => $request->product,
+            'Model' => $request->model,
+            'Plan SVP' => $request->plan_svp,
+            'Act SVP' => $request->act_svp,
+        ];
+
+        // Send data to webhook
+        $url = 'https://n8n.servercikarang.cloud/webhook/create-pcr';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($pcrData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+        ]);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode == 200) {
+            return redirect()->route('pcr.index')->with('success', 'PCR created successfully!');
+        } else {
+            return back()->withInput()->with('error', 'Failed to create PCR. Please try again.');
+        }
+    }
+
+    public function listRfq()
+    {
+        // Dummy data for demonstration
+        $rfqData = [
+            [
+                'rfq_number' => 'RFQ-2025-001',
+                'rfq_date' => '2025-01-15',
+                'project' => 'Engine Assembly',
+                'department' => 'Purchasing',
+                'part_name' => 'Piston Ring',
+                'part_number' => 'PR-001',
+                'quantity' => 1000,
+                'unit' => 'pcs',
+                'description' => 'High quality piston rings for automotive engine',
+                'suppliers' => ['PT. AISIN INDONESIA', 'PT. AISIN AUTOMOTIVE INDONESIA'],
+                'status' => 'Open'
+            ],
+            [
+                'rfq_number' => 'RFQ-2025-002',
+                'rfq_date' => '2025-01-20',
+                'project' => 'Transmission System',
+                'department' => 'Purchasing',
+                'part_name' => 'Gear Box',
+                'part_number' => 'GB-002',
+                'quantity' => 50,
+                'unit' => 'set',
+                'description' => 'Automatic transmission gear box assembly',
+                'suppliers' => ['PT. AISIN WORLD CORP', 'PT. AISIN SEIKI INDONESIA'],
+                'status' => 'Closed'
+            ]
+        ];
+
+        return view('list_rfq', compact('rfqData'));
+    }
+
+    public function createRfq()
+    {
+        return view('create_rfq');
+    }
+
+    public function storeRfq(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'rfq_number' => 'required|string|max:255',
+            'rfq_date' => 'required|date',
+            'project' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'part_name' => 'required|string|max:255',
+            'part_number' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'unit' => 'required|string|max:50',
+            'description' => 'required|string',
+            'suppliers' => 'sometimes|array',
+            'custom_suppliers' => 'sometimes|string',
+        ]);
+
+        // Custom validation: ensure at least one supplier is selected
+        $selectedSuppliers = $request->suppliers ?? [];
+        $customSuppliersText = $request->custom_suppliers ?? '';
+
+        if (empty($selectedSuppliers) && empty($customSuppliersText)) {
+            return back()->withInput()->withErrors(['suppliers' => 'Please select at least one supplier or add custom suppliers.']);
+        }
+
+        // Process suppliers
+        $suppliers = $selectedSuppliers;
+
+        // Add custom suppliers if provided
+        if (!empty($customSuppliersText)) {
+            $customSuppliers = array_filter(array_map('trim', explode("\n", $customSuppliersText)));
+            $suppliers = array_merge($suppliers, $customSuppliers);
+        }
+
+        // Remove duplicates
+        $suppliers = array_unique($suppliers);
+
+        // Prepare RFQ data
+        $rfqData = [
+            'rfq_number' => $request->rfq_number,
+            'rfq_date' => $request->rfq_date,
+            'project' => $request->project,
+            'department' => $request->department,
+            'part_name' => $request->part_name,
+            'part_number' => $request->part_number,
+            'quantity' => $request->quantity,
+            'unit' => $request->unit,
+            'description' => $request->description,
+            'suppliers' => $suppliers,
+            'created_by' => Auth::user()->name,
+            'created_at' => now(),
+        ];
+
+        // Here you would typically save to database or send to webhook
+        // For now, we'll just redirect with success message
+
+        return redirect()->route('rfq.index')->with('success', 'RFQ created successfully! Suppliers: ' . implode(', ', $suppliers));
+    }
+
+    public function listPriceControlled()
+    {
+        // Dummy data for demonstration
+        $priceControlledData = [
+            [
+                'supplier' => 'PT. AISIN INDONESIA',
+                'periode' => '2025-09',
+                'status' => 'Approve',
+                'created_date' => '2025-01-15',
+                'notes' => 'Price approved for Q3 2025'
+            ],
+            [
+                'supplier' => 'PT. AISIN AUTOMOTIVE INDONESIA',
+                'periode' => '2025-10',
+                'status' => 'Process Approval',
+                'created_date' => '2025-01-18',
+                'notes' => 'Waiting for final approval'
+            ],
+            [
+                'supplier' => 'PT. AISIN WORLD CORP',
+                'periode' => '2025-08',
+                'status' => 'Wait Quotation',
+                'created_date' => '2025-01-10',
+                'notes' => 'Waiting for supplier quotation'
+            ],
+            [
+                'supplier' => 'PT. AISIN SEIKI INDONESIA',
+                'periode' => '2025-11',
+                'status' => 'Approve',
+                'created_date' => '2025-01-20',
+                'notes' => 'Price control established'
+            ],
+            [
+                'supplier' => 'PT. AISIN CHEMICAL INDONESIA',
+                'periode' => '2025-09',
+                'status' => 'Process Approval',
+                'created_date' => '2025-01-12',
+                'notes' => 'Under review by management'
+            ]
+        ];
+
+        return view('list_price_controlled', compact('priceControlledData'));
+    }
+
+    public function createPriceControlled()
+    {
+        return view('create_price_controlled');
+    }
+
+    public function storePriceControlled(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'supplier' => 'required|string|max:255',
+            'periode' => 'required|string|max:7',
+            'status' => 'required|in:Approve,Wait Quotation,Process Approval',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        // Prepare price controlled data
+        $priceControlledData = [
+            'supplier' => $request->supplier,
+            'periode' => $request->periode,
+            'status' => $request->status,
+            'notes' => $request->notes,
+            'created_by' => Auth::user()->name,
+            'created_date' => now()->format('Y-m-d'),
+            'created_at' => now(),
+        ];
+
+        // Here you would typically save to database
+        // For now, we'll just redirect with success message
+
+        return redirect()->route('price-controlled.index')->with('success', 'Price Controlled record created successfully for ' . $request->supplier . ' (' . $request->periode . ')');
+    }
 }

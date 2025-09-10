@@ -26,7 +26,21 @@ Route::get('/simada-ai', function() {
 });
 
 // List PCR feature
-Route::get('/list-pcr', 'HomeController@listPcr');
+Route::get('/list-pcr', 'HomeController@listPcr')->name('pcr.index');
+
+// Create PCR feature
+Route::get('/create-pcr', 'HomeController@createPcr')->name('pcr.create');
+Route::post('/create-pcr', 'HomeController@storePcr')->name('pcr.store');
 
 // List Pending PCR feature
-Route::get('/list-pending-pcr', 'HomeController@listPendingPcr');
+Route::get('/list-pending-pcr', 'HomeController@listPendingPcr')->name('pcr.pending');
+
+// RFQ features
+Route::get('/list-rfq', 'HomeController@listRfq')->name('rfq.index');
+Route::get('/create-rfq', 'HomeController@createRfq')->name('rfq.create');
+Route::post('/create-rfq', 'HomeController@storeRfq')->name('rfq.store');
+
+// Price Controlled features
+Route::get('/list-price-controlled', 'HomeController@listPriceControlled')->name('price-controlled.index');
+Route::get('/create-price-controlled', 'HomeController@createPriceControlled')->name('price-controlled.create');
+Route::post('/create-price-controlled', 'HomeController@storePriceControlled')->name('price-controlled.store');
