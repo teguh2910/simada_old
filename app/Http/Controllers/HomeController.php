@@ -572,4 +572,344 @@ class HomeController extends Controller
 
         return redirect()->route('price-controlled.index')->with('success', 'Price Controlled record created successfully for ' . $request->supplier . ' (' . $request->periode . ')');
     }
+
+    public function listSurveySupplier()
+    {
+        // Dummy data for demonstration
+        $surveyData = [
+            [
+                'supplier' => 'PT. AISIN INDONESIA',
+                'type_survey' => 'Supplier Performance',
+                'due_date' => '2025-10-15',
+                'status' => 'Completed',
+                'created_date' => '2025-01-15',
+                'notes' => 'Excellent performance in Q3 2025'
+            ],
+            [
+                'supplier' => 'PT. AISIN AUTOMOTIVE INDONESIA',
+                'type_survey' => 'Quality Assessment',
+                'due_date' => '2025-11-20',
+                'status' => 'In Progress',
+                'created_date' => '2025-01-18',
+                'notes' => 'Quality assessment survey in progress'
+            ],
+            [
+                'supplier' => 'PT. AISIN WORLD CORP',
+                'type_survey' => 'Delivery Performance',
+                'due_date' => '2025-09-30',
+                'status' => 'Overdue',
+                'created_date' => '2025-01-10',
+                'notes' => 'Delivery performance survey overdue'
+            ],
+            [
+                'supplier' => 'PT. AISIN SEIKI INDONESIA',
+                'type_survey' => 'Technical Capability',
+                'due_date' => '2025-12-01',
+                'status' => 'Pending',
+                'created_date' => '2025-01-20',
+                'notes' => 'Technical capability assessment pending'
+            ],
+            [
+                'supplier' => 'PT. AISIN CHEMICAL INDONESIA',
+                'type_survey' => 'Environmental Compliance',
+                'due_date' => '2025-10-25',
+                'status' => 'Completed',
+                'created_date' => '2025-01-12',
+                'notes' => 'Environmental compliance survey completed'
+            ]
+        ];
+
+        return view('list_survey_supplier', compact('surveyData'));
+    }
+
+    public function createSurveySupplier()
+    {
+        return view('create_survey_supplier');
+    }
+
+    public function storeSurveySupplier(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'supplier' => 'required|string|max:255',
+            'type_survey' => 'required|string|max:255',
+            'due_date' => 'required|date',
+            'status' => 'required|in:Pending,In Progress,Completed,Overdue',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        // Prepare survey data
+        $surveyData = [
+            'supplier' => $request->supplier,
+            'type_survey' => $request->type_survey,
+            'due_date' => $request->due_date,
+            'status' => $request->status,
+            'notes' => $request->notes,
+            'created_by' => Auth::user()->name,
+            'created_date' => now()->format('Y-m-d'),
+            'created_at' => now(),
+        ];
+
+        // Here you would typically save to database
+        // For now, we'll just redirect with success message
+
+        return redirect()->route('survey-supplier.index')->with('success', 'Survey to Supplier created successfully for ' . $request->supplier . ' (' . $request->type_survey . ')');
+    }
+
+    public function listFs()
+    {
+        // Dummy data for demonstration
+        $fsData = [
+            [
+                'project_title' => 'New Engine Assembly Line',
+                'description' => 'Feasibility study for implementing a new automated engine assembly line to improve production efficiency and reduce costs.',
+                'estimated_cost' => 2500000,
+                'timeline_months' => 12,
+                'risk_level' => 'Medium',
+                'status' => 'In Progress',
+                'assigned_to' => 'John Doe',
+                'due_date' => '2025-12-15',
+                'project_type' => 'Process Improvement',
+                'notes' => 'High potential ROI expected'
+            ],
+            [
+                'project_title' => 'Supplier Quality Management System',
+                'description' => 'Implementation of automated quality management system for supplier evaluation and monitoring.',
+                'estimated_cost' => 850000,
+                'timeline_months' => 8,
+                'risk_level' => 'Low',
+                'status' => 'Completed',
+                'assigned_to' => 'Jane Smith',
+                'due_date' => '2025-09-30',
+                'project_type' => 'Quality Enhancement',
+                'notes' => 'Successfully implemented and operational'
+            ],
+            [
+                'project_title' => 'Cost Reduction Initiative',
+                'description' => 'Comprehensive cost reduction study focusing on material costs and operational efficiencies.',
+                'estimated_cost' => 150000,
+                'timeline_months' => 6,
+                'risk_level' => 'High',
+                'status' => 'Pending',
+                'assigned_to' => 'Bob Johnson',
+                'due_date' => '2025-11-20',
+                'project_type' => 'Cost Reduction',
+                'notes' => 'Requires careful analysis of supply chain'
+            ],
+            [
+                'project_title' => 'Digital Transformation Project',
+                'description' => 'Study for digital transformation of manufacturing processes including IoT integration and data analytics.',
+                'estimated_cost' => 1800000,
+                'timeline_months' => 18,
+                'risk_level' => 'High',
+                'status' => 'In Progress',
+                'assigned_to' => 'Alice Brown',
+                'due_date' => '2026-03-15',
+                'project_type' => 'Technology Upgrade',
+                'notes' => 'Strategic importance for future competitiveness'
+            ],
+            [
+                'project_title' => 'Market Expansion Study',
+                'description' => 'Feasibility analysis for expanding into new markets in Southeast Asia.',
+                'estimated_cost' => 300000,
+                'timeline_months' => 9,
+                'risk_level' => 'Medium',
+                'status' => 'Cancelled',
+                'assigned_to' => 'Charlie Wilson',
+                'due_date' => '2025-10-30',
+                'project_type' => 'Market Expansion',
+                'notes' => 'Cancelled due to market conditions'
+            ]
+        ];
+
+        return view('list_fs', compact('fsData'));
+    }
+
+    public function createFs()
+    {
+        return view('create_fs');
+    }
+
+    public function storeFs(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'project_title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'estimated_cost' => 'required|numeric|min:0',
+            'timeline_months' => 'required|integer|min:1',
+            'risk_level' => 'required|in:Low,Medium,High',
+            'status' => 'required|in:Pending,In Progress,Completed,Cancelled',
+            'assigned_to' => 'required|string|max:255',
+            'due_date' => 'required|date|after:today',
+            'project_type' => 'required|string|max:255',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        // Prepare feasibility study data
+        $fsData = [
+            'project_title' => $request->project_title,
+            'description' => $request->description,
+            'estimated_cost' => $request->estimated_cost,
+            'timeline_months' => $request->timeline_months,
+            'risk_level' => $request->risk_level,
+            'status' => $request->status,
+            'assigned_to' => $request->assigned_to,
+            'due_date' => $request->due_date,
+            'project_type' => $request->project_type,
+            'notes' => $request->notes,
+            'created_by' => Auth::user()->name,
+            'created_date' => now()->format('Y-m-d'),
+            'created_at' => now(),
+        ];
+
+        // Here you would typically save to database
+        // For now, we'll just redirect with success message
+
+        return redirect()->route('fs.index')->with('success', 'Feasibility Study created successfully: ' . $request->project_title);
+    }
+
+    public function listQuotation()
+    {
+        // Dummy data for demonstration
+        $quotationData = [
+            [
+                'quotation_number' => 'QT-2025-001',
+                'supplier' => 'PT. ABC Manufacturing',
+                'part_number' => 'PN-12345',
+                'part_name' => 'Engine Cylinder Head',
+                'quantity' => 500,
+                'unit_price' => 250000,
+                'total_price' => 125000000,
+                'currency' => 'IDR',
+                'valid_until' => '2025-12-31',
+                'status' => 'Pending',
+                'quotation_date' => '2025-09-01',
+                'contact_person' => 'John Smith',
+                'terms' => '30 days payment terms',
+                'notes' => 'Standard quality requirements apply'
+            ],
+            [
+                'quotation_number' => 'QT-2025-002',
+                'supplier' => 'CV. XYZ Components',
+                'part_number' => 'PN-67890',
+                'part_name' => 'Transmission Gear Set',
+                'quantity' => 200,
+                'unit_price' => 450000,
+                'total_price' => 90000000,
+                'currency' => 'IDR',
+                'valid_until' => '2025-11-15',
+                'status' => 'Approved',
+                'quotation_date' => '2025-08-15',
+                'contact_person' => 'Jane Doe',
+                'terms' => '45 days payment terms',
+                'notes' => 'Requires ISO certification'
+            ],
+            [
+                'quotation_number' => 'QT-2025-003',
+                'supplier' => 'PT. Global Parts Ltd',
+                'part_number' => 'PN-54321',
+                'part_name' => 'Brake System Assembly',
+                'quantity' => 300,
+                'unit_price' => 180000,
+                'total_price' => 54000000,
+                'currency' => 'IDR',
+                'valid_until' => '2025-10-30',
+                'status' => 'Rejected',
+                'quotation_date' => '2025-08-20',
+                'contact_person' => 'Bob Johnson',
+                'terms' => '60 days payment terms',
+                'notes' => 'Price too high, negotiating for better rate'
+            ],
+            [
+                'quotation_number' => 'QT-2025-004',
+                'supplier' => 'PT. Precision Engineering',
+                'part_number' => 'PN-98765',
+                'part_name' => 'Fuel Injection System',
+                'quantity' => 150,
+                'unit_price' => 750000,
+                'total_price' => 112500000,
+                'currency' => 'IDR',
+                'valid_until' => '2026-01-15',
+                'status' => 'Under Review',
+                'quotation_date' => '2025-09-05',
+                'contact_person' => 'Alice Brown',
+                'terms' => '30 days payment terms',
+                'notes' => 'Technical specifications need verification'
+            ],
+            [
+                'quotation_number' => 'QT-2025-005',
+                'supplier' => 'CV. Metal Works Indonesia',
+                'part_number' => 'PN-13579',
+                'part_name' => 'Exhaust Manifold',
+                'quantity' => 400,
+                'unit_price' => 320000,
+                'total_price' => 128000000,
+                'currency' => 'IDR',
+                'valid_until' => '2025-12-20',
+                'status' => 'Approved',
+                'quotation_date' => '2025-08-28',
+                'contact_person' => 'Charlie Wilson',
+                'terms' => '45 days payment terms',
+                'notes' => 'Bulk discount applied for large quantity'
+            ]
+        ];
+
+        return view('list_quotation', compact('quotationData'));
+    }
+
+    public function createQuotation()
+    {
+        return view('create_quotation');
+    }
+
+    public function storeQuotation(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'supplier' => 'required|string|max:255',
+            'part_number' => 'required|string|max:100',
+            'part_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
+            'currency' => 'required|in:IDR,USD,EUR',
+            'valid_until' => 'required|date|after:today',
+            'quotation_date' => 'required|date',
+            'contact_person' => 'required|string|max:255',
+            'terms' => 'required|string|max:500',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        // Calculate total price
+        $totalPrice = $request->quantity * $request->unit_price;
+
+        // Generate quotation number
+        $quotationNumber = 'QT-' . date('Y') . '-' . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+
+        // Prepare quotation data
+        $quotationData = [
+            'quotation_number' => $quotationNumber,
+            'supplier' => $request->supplier,
+            'part_number' => $request->part_number,
+            'part_name' => $request->part_name,
+            'quantity' => $request->quantity,
+            'unit_price' => $request->unit_price,
+            'total_price' => $totalPrice,
+            'currency' => $request->currency,
+            'valid_until' => $request->valid_until,
+            'status' => 'Pending',
+            'quotation_date' => $request->quotation_date,
+            'contact_person' => $request->contact_person,
+            'terms' => $request->terms,
+            'notes' => $request->notes,
+            'created_by' => Auth::user()->name,
+            'created_date' => now()->format('Y-m-d'),
+            'created_at' => now(),
+        ];
+
+        // Here you would typically save to database
+        // For now, we'll just redirect with success message
+
+        return redirect()->route('quotation.index')->with('success', 'Quotation created successfully: ' . $quotationNumber . ' for ' . $request->supplier);
+    }
 }

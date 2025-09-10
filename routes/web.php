@@ -44,3 +44,18 @@ Route::post('/create-rfq', 'HomeController@storeRfq')->name('rfq.store');
 Route::get('/list-price-controlled', 'HomeController@listPriceControlled')->name('price-controlled.index');
 Route::get('/create-price-controlled', 'HomeController@createPriceControlled')->name('price-controlled.create');
 Route::post('/create-price-controlled', 'HomeController@storePriceControlled')->name('price-controlled.store');
+
+// Survey to Supplier features
+Route::get('/list-survey-supplier', 'HomeController@listSurveySupplier')->name('survey-supplier.index');
+Route::get('/create-survey-supplier', 'HomeController@createSurveySupplier')->name('survey-supplier.create');
+Route::post('/create-survey-supplier', 'HomeController@storeSurveySupplier')->name('survey-supplier.store');
+
+// Feasibility Study features
+Route::get('/list-fs', 'HomeController@listFs')->name('fs.index');
+Route::get('/create-fs', 'HomeController@createFs')->name('fs.create');
+Route::post('/create-fs', 'HomeController@storeFs')->name('fs.store');
+
+// Check Quotation features
+Route::get('/list-quotation', 'HomeController@listQuotation')->name('quotation.index');
+Route::get('/create-quotation', 'HomeController@createQuotation')->name('quotation.create');
+Route::post('/create-quotation', 'HomeController@storeQuotation')->name('quotation.store');

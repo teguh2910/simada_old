@@ -99,7 +99,7 @@
                 <!-- RFQ Menu Group -->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
                             RFQ
                             <i class="right fas fa-angle-left"></i>
@@ -145,6 +145,82 @@
                         </li>
                     </ul>
                 </li>
+
+                <!-- Survey to Supplier Menu Group -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-poll"></i>
+                        <p>
+                            Survey to Supplier
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('survey-supplier.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Surveys</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('survey-supplier.create') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add Survey</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Feasibility Study Menu Group -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>
+                            Feasibility Study
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('fs.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List FS</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('fs.create') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create FS</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Check Quotation Menu Group -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-file-contract"></i>
+                        <p>
+                            Check Quotation
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('quotation.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Quotations</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('quotation.create') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add Quotation</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
