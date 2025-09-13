@@ -1,0 +1,4 @@
+name,pic,no_hp,email,presdir,alamat,no_telp,is_active
+"Supplier A","John Doe","08123456789","john@supplierA.com","Mr. President","Jl. Supplier A No. 1","021-1234567",1
+"Supplier B","Jane Smith","08198765432","jane@supplierB.com","Mrs. Director","Jl. Supplier B No. 2","021-7654321",1
+"Supplier C","Bob Johnson","","bob@supplierC.com","","Jl. Supplier C No. 3","",0

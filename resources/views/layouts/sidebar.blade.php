@@ -109,13 +109,75 @@
                         <li class="nav-item">
                             <a href="{{ route('rfq.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>List RFQ</p>
+                                <p>List RFQ Project</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('rfq.create') }}" class="nav-link">
+                            <a href="{{ route('rfq-apr.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Create RFQ</p>
+                                <p>List RFQ APR</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('rfq-gp.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List RFQ GP</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Survey to Supplier Menu Group -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-poll"></i>
+                        <p>
+                            Survey to Supplier
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('survey-supplier.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List Surveys</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Master Data Menu Group -->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-database"></i>
+                        <p>
+                            Master Data
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('customers.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Customers</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('products.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Products</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('suppliers.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Suppliers</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('pics.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>PIC (Person In Charge)</p>
                             </a>
                         </li>
                     </ul>
@@ -146,30 +208,7 @@
                     </ul>
                 </li>
 
-                <!-- Survey to Supplier Menu Group -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-poll"></i>
-                        <p>
-                            Survey to Supplier
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('survey-supplier.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>List Surveys</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('survey-supplier.create') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Add Survey</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+
 
                 <!-- Feasibility Study Menu Group -->
                 <li class="nav-item has-treeview">

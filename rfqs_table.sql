@@ -1,0 +1,23 @@
+CREATE TABLE `rfqs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `produk` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `std_qty` int(11) NOT NULL,
+  `drawing_time` date DEFAULT NULL,
+  `OTS_Target` date DEFAULT NULL,
+  `OTOP_target` date DEFAULT NULL,
+  `SOP` date DEFAULT NULL,
+  `part_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `part_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `qty_month` int(11) NOT NULL,
+  `note` text COLLATE utf8_unicode_ci,
+  `due_date` date NOT NULL,
+  `pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `id_supplier` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `drawing_file` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `excel_term_file` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `loading_capacity_file` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
