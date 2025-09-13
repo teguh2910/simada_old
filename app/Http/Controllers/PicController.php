@@ -44,7 +44,7 @@ class PicController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'email' => 'nullable|email|unique:pics,email|max:255',
             'phone' => 'nullable|string|max:20',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
@@ -92,7 +92,7 @@ class PicController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'email' => 'nullable|email|unique:pics,email,' . $id . '|max:255',
             'phone' => 'nullable|string|max:20',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',

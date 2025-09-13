@@ -116,9 +116,8 @@ class RfqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Rfq $rfq)
     {
-        $rfq = Rfq::findOrFail($id);
         return view('rfq.show', compact('rfq'));
     }
 
@@ -128,10 +127,8 @@ class RfqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Rfq $rfq)
     {
-        $rfq = Rfq::findOrFail($id);
-
         // Get data from database models
         $customers = Customer::where('is_active', 1)->orderBy('name')->pluck('name')->toArray();
         $products = Product::where('is_active', 1)->orderBy('name')->pluck('name')->toArray();
@@ -148,7 +145,7 @@ class RfqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Rfq $rfq)
     {
         $this->validate($request, [
             'customer' => 'required|string|max:255',
@@ -171,7 +168,20 @@ class RfqController extends Controller
             'loading_capacity_file' => 'nullable|file|mimes:pdf,xlsx,xls,doc,docx|max:10240',
         ]);
 
-        $rfq = Rfq::findOrFail($id);
+        $rfq->customer = $request->customer;
+        $rfq->produk = $request->produk;
+        $rfq->std_qty = $request->std_qty;
+        $rfq->drawing_time = $request->drawing_time;
+        $rfq->OTS_Target = $request->OTS_Target;
+        $rfq->OTOP_target = $request->OTOP_target;
+        $rfq->SOP = $request->SOP;
+        $rfq->part_number = $request->part_number;
+        $rfq->part_name = $request->part_name;
+        $rfq->qty_month = $request->qty_month;
+        $rfq->note = $request->note;
+        $rfq->due_date = $request->due_date;
+        $rfq->pic_id = $request->pic;
+        $rfq->id_supplier = json_encode($request->id_supplier);
         $rfq->customer = $request->customer;
         $rfq->produk = $request->produk;
         $rfq->std_qty = $request->std_qty;
@@ -223,10 +233,8 @@ class RfqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Rfq $rfq)
     {
-        $rfq = Rfq::findOrFail($id);
-        
         // Delete associated files
         if ($rfq->drawing_file && Storage::disk('public')->exists($rfq->drawing_file)) {
             Storage::disk('public')->delete($rfq->drawing_file);
@@ -251,10 +259,8 @@ class RfqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function sendEmail($id)
+    public function sendEmail(Rfq $rfq)
     {
-        $rfq = Rfq::findOrFail($id);
-
         try {
             // For demo purposes, send to a dummy email
             // In production, you would send to actual supplier emails

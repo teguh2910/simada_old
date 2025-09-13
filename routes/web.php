@@ -9,7 +9,7 @@ Route::post('/upload/{id}', 'HomeController@upload_store');
 Route::get('/feedback/{id}', 'HomeController@feedback');
 Route::post('/feedback/{id}', 'HomeController@feedback_store');
 Route::get('/viewfeedback/{id}', 'HomeController@viewfeedback');
-Route::get('/revise/{id}', 'HomeController@revise');
+Route::get('/revise/{id}', 'HomeController@revise')->name('revise');
 Route::post('/revise/{id}', 'HomeController@revise_store');
 Route::get('/draft', 'HomeController@draft');
 Route::get('/final', 'HomeController@final_view');
