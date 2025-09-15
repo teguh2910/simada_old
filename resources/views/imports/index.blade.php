@@ -149,8 +149,12 @@
                                     <code>name, is_active (optional)</code>
 
                                     <h6>Suppliers:</h6>
-                                    <code>name, pic (optional), no_hp (optional), email (optional), presdir (optional),
-                                        alamat (optional), no_telp (optional), is_active (optional)</code>
+                                    <code>name, customer (optional), customer_id (optional), pic (optional), no_hp
+                                        (optional), email (optional), presdir (optional), alamat (optional), no_telp
+                                        (optional), is_active (optional)</code>
+                                    <br><small class="text-muted">Note: Use either 'customer' (customer name) or
+                                        'customer_id' (customer ID) to assign suppliers to customers. Leave both empty for
+                                        suppliers without customer assignment.</small>
                                 </div>
                             </div>
                         </div>

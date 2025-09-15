@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Supplier;
+use App\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,7 +21,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::orderBy('name')->paginate(10);
+        $suppliers = Supplier::with('customer')->orderBy('name')->paginate(10);
         return view('suppliers.index', compact('suppliers'));
     }
 
@@ -31,7 +32,8 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return view('suppliers.create');
+        $customers = Customer::orderBy('name')->get();
+        return view('suppliers.create', compact('customers'));
     }
 
     /**
@@ -44,6 +46,7 @@ class SupplierController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:suppliers',
+            'customer_id' => 'nullable|exists:customers,id',
             'pic' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
@@ -73,7 +76,7 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        $supplier = Supplier::findOrFail($id);
+        $supplier = Supplier::with('customer')->findOrFail($id);
         return view('suppliers.show', compact('supplier'));
     }
 
@@ -86,7 +89,8 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $supplier = Supplier::findOrFail($id);
-        return view('suppliers.edit', compact('supplier'));
+        $customers = Customer::orderBy('name')->get();
+        return view('suppliers.edit', compact('supplier', 'customers'));
     }
 
     /**
@@ -102,6 +106,7 @@ class SupplierController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:suppliers,name,' . $id,
+            'customer_id' => 'nullable|exists:customers,id',
             'pic' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',

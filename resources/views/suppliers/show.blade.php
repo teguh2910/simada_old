@@ -48,8 +48,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Person in Charge (PIC):</label>
-                                        <p class="form-control-plaintext">{{ $supplier->pic ?: '-' }}</p>
+                                        <label>Customer:</label>
+                                        <p class="form-control-plaintext">
+                                            {{ $supplier->customer ? $supplier->customer->name : '-' }}</p>
                                     </div>
                                 </div>
                             </div>

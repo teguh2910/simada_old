@@ -52,6 +52,7 @@
                                     <thead>
                                         <tr>
                                             <th>Supplier Name</th>
+                                            <th>Customer</th>
                                             <th>PIC</th>
                                             <th>Phone</th>
                                             <th>Email</th>
@@ -63,6 +64,7 @@
                                         @foreach ($suppliers as $supplier)
                                             <tr>
                                                 <td>{{ $supplier->name }}</td>
+                                                <td>{{ $supplier->customer ? $supplier->customer->name : '-' }}</td>
                                                 <td>{{ $supplier->pic ?? '-' }}</td>
                                                 <td>{{ $supplier->no_hp ?? '-' }}</td>
                                                 <td>{{ $supplier->email ?? '-' }}</td>

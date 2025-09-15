@@ -14,7 +14,8 @@ class Supplier extends Model
         'presdir',
         'alamat',
         'no_telp',
-        'is_active'
+        'is_active',
+        'customer_id'
     ];
 
     protected $casts = [
@@ -27,6 +28,14 @@ class Supplier extends Model
     public function rfqs()
     {
         return $this->hasMany(Rfq::class, 'id_supplier', 'name');
+    }
+
+    /**
+     * Get the customer associated with this supplier
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     /**

@@ -57,12 +57,21 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="pic">Person in Charge (PIC)</label>
-                                            <input type="text"
-                                                class="form-control @if ($errors->has('pic')) is-invalid @endif"
-                                                id="pic" name="pic" value="{{ old('pic') }}">
-                                            @if ($errors->has('pic'))
-                                                <div class="invalid-feedback">{{ $errors->first('pic') }}</div>
+                                            <label for="customer_id">Customer</label>
+                                            <select class="form-control @if ($errors->has('customer_id')) is-invalid @endif"
+                                                id="customer_id" name="customer_id">
+                                                <option value="">Select Customer (Optional)</option>
+                                                @if (isset($customers))
+                                                    @foreach ($customers as $customer)
+                                                        <option value="{{ $customer->id }}"
+                                                            {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                                            {{ $customer->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            @if ($errors->has('customer_id'))
+                                                <div class="invalid-feedback">{{ $errors->first('customer_id') }}</div>
                                             @endif
                                         </div>
                                     </div>
