@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\transaction;
 use App\komentar;
+use App\LeaveRequest;
 use Auth;
 use Carbon\Carbon;
 
@@ -284,7 +285,37 @@ class HomeController extends Controller
             }
         }
 
-        return view('dashboard', compact(['outs','draft','final','overd','pcrTotal','pcrFinish','pcrCancel','pcrOnHold','pcrStage0','pcrStage1','pcrStage2','pcrStage3']));
+        // Leave Statistics
+        $todayLeavesCount = LeaveRequest::whereIn('status', ['approved', 'pending'])
+            ->whereDate('leave_date', Carbon::today())
+            ->count();
+        $pendingLeavesCount = LeaveRequest::where('status', 'pending')->count();
+        $approvedLeavesCount = LeaveRequest::where('status', 'approved')
+            ->whereMonth('approved_at', Carbon::now()->month)
+            ->whereYear('approved_at', Carbon::now()->year)
+            ->count();
+        $totalLeavesCount = LeaveRequest::count();
+
+        // Today's leave details (show both pending and approved)
+        $todayLeaves = LeaveRequest::with('user', 'approver')
+            ->whereIn('status', ['approved', 'pending'])
+            ->whereDate('leave_date', Carbon::today())
+            ->orderBy('status', 'desc') // Show approved first, then pending
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // User Statistics
+        $totalUsersCount = \App\User::count();
+        $activeUsersCount = \App\User::count(); // In Laravel 5, count all users as active since no email verification
+        $mimUsersCount = \App\User::where('dept', 'MIM')->count();
+        $nplUsersCount = \App\User::where('dept', 'NPL')->count();
+
+        return view('dashboard', compact([
+            'outs','draft','final','overd',
+            'pcrTotal','pcrFinish','pcrCancel','pcrOnHold','pcrStage0','pcrStage1','pcrStage2','pcrStage3',
+            'todayLeavesCount','pendingLeavesCount','approvedLeavesCount','totalLeavesCount','todayLeaves',
+            'totalUsersCount','activeUsersCount','mimUsersCount','nplUsersCount'
+        ]));
     }
 
     public function listPcr()
@@ -488,7 +519,7 @@ class HomeController extends Controller
             'description' => $request->description,
             'suppliers' => $suppliers,
             'created_by' => Auth::user()->name,
-            'created_at' => now(),
+            'created_at' => Carbon::now(),
         ];
 
         // Here you would typically save to database or send to webhook
@@ -563,8 +594,8 @@ class HomeController extends Controller
             'status' => $request->status,
             'notes' => $request->notes,
             'created_by' => Auth::user()->name,
-            'created_date' => now()->format('Y-m-d'),
-            'created_at' => now(),
+            'created_date' => Carbon::now()->format('Y-m-d'),
+            'created_at' => Carbon::now(),
         ];
 
         // Here you would typically save to database
@@ -646,8 +677,8 @@ class HomeController extends Controller
             'status' => $request->status,
             'notes' => $request->notes,
             'created_by' => Auth::user()->name,
-            'created_date' => now()->format('Y-m-d'),
-            'created_at' => now(),
+            'created_date' => Carbon::now()->format('Y-m-d'),
+            'created_at' => Carbon::now(),
         ];
 
         // Here you would typically save to database
@@ -759,8 +790,8 @@ class HomeController extends Controller
             'project_type' => $request->project_type,
             'notes' => $request->notes,
             'created_by' => Auth::user()->name,
-            'created_date' => now()->format('Y-m-d'),
-            'created_at' => now(),
+            'created_date' => Carbon::now()->format('Y-m-d'),
+            'created_at' => Carbon::now(),
         ];
 
         // Here you would typically save to database
@@ -903,8 +934,8 @@ class HomeController extends Controller
             'terms' => $request->terms,
             'notes' => $request->notes,
             'created_by' => Auth::user()->name,
-            'created_date' => now()->format('Y-m-d'),
-            'created_at' => now(),
+            'created_date' => Carbon::now()->format('Y-m-d'),
+            'created_at' => Carbon::now(),
         ];
 
         // Here you would typically save to database

@@ -51,6 +51,17 @@ Route::resource('products', 'ProductController');
 Route::resource('suppliers', 'SupplierController');
 Route::resource('pics', 'PicController');
 
+// Leave management routes
+Route::resource('leave_requests', 'LeaveRequestController');
+Route::post('leave_requests/{id}/approve', 'LeaveRequestController@approve')->name('leave_requests.approve');
+Route::post('leave_requests/{id}/reject', 'LeaveRequestController@reject')->name('leave_requests.reject');
+Route::get('leave_requests_today', 'LeaveRequestController@today')->name('leave_requests.today');
+
+// User management routes
+Route::resource('users', 'UserController');
+Route::get('profile', 'UserController@profile')->name('users.profile');
+Route::post('profile', 'UserController@updateProfile')->name('users.updateProfile');
+
 // Import routes
 Route::get('/imports', 'ImportController@index')->name('imports.index');
 Route::post('/imports/customers', 'ImportController@importCustomers')->name('imports.customers');
