@@ -62,15 +62,47 @@
                         <td>{{ $item['Department'] ?? '' }}</td>
                         <td>{{ $item['Reg Numb'] ?? '' }}</td>
                         <td>
+                          @php
+                            $isOverdue = false;
+                            $planSvp = $item['Plan SVP'] ?? '';
+                            $actSvp = $item['Act SVP'] ?? '';
+                            
+                            // Check if PCR is overdue
+                            if (!empty($planSvp) && empty($actSvp)) {
+                              try {
+                                $planDate = \Carbon\Carbon::createFromFormat('Y-m-d', $planSvp);
+                                $isOverdue = $planDate->isPast();
+                              } catch (\Exception $e) {
+                                // Try different date formats if the first one fails
+                                try {
+                                  $planDate = \Carbon\Carbon::createFromFormat('d/m/Y', $planSvp);
+                                  $isOverdue = $planDate->isPast();
+                                } catch (\Exception $e2) {
+                                  try {
+                                    $planDate = \Carbon\Carbon::parse($planSvp);
+                                    $isOverdue = $planDate->isPast();
+                                  } catch (\Exception $e3) {
+                                    $isOverdue = false;
+                                  }
+                                }
+                              }
+                            }
+                          @endphp
+                          
                           <span class="badge
-                            @if($item['Status'] == 'On Hold') badge-warning
+                            @if($isOverdue) badge-danger
+                            @elseif($item['Status'] == 'On Hold') badge-warning
                             @elseif($item['Status'] == 'Stage 0 Progress') badge-info
                             @elseif($item['Status'] == 'Stage 1 Progress') badge-primary
                             @elseif($item['Status'] == 'Stage 2 Progress') badge-success
                             @elseif($item['Status'] == 'Stage 3 Progress') badge-dark
                             @else badge-secondary
                             @endif">
-                            {{ $item['Status'] ?? '' }}
+                            @if($isOverdue)
+                              {{ $item['Status'] ?? '' }} (OVERDUE)
+                            @else
+                              {{ $item['Status'] ?? '' }}
+                            @endif
                           </span>
                         </td>
                         <td>{{ $item['Coy'] ?? '' }}</td>
@@ -125,6 +157,29 @@
         #list-pending-pcr-table th:nth-child(14), #list-pending-pcr-table td:nth-child(14) { width: 100px !important; min-width: 100px !important; }
         #list-pending-pcr-table th:nth-child(15), #list-pending-pcr-table td:nth-child(15) { width: 100px !important; min-width: 100px !important; }
         #list-pending-pcr-table th:nth-child(16), #list-pending-pcr-table td:nth-child(16) { width: 100px !important; min-width: 100px !important; }
+        
+        /* Overdue PCR styling */
+        .badge-danger {
+          background-color: #dc3545 !important;
+          color: white !important;
+          font-weight: bold !important;
+          animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+          70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        
+        /* Make overdue PCR rows more visible */
+        tr:has(.badge-danger) {
+          background-color: #fff5f5 !important;
+        }
+        
+        tr:has(.badge-danger):hover {
+          background-color: #fee2e2 !important;
+        }
       `)
       .appendTo('head');
 
